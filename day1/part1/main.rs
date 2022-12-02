@@ -21,10 +21,6 @@ fn main() {
 	}
     }
 
-    for line in &input {
-	println!("{line}");
-    }
-
     let most_calories = find_most_calories(input);
 
     println!("The elf with the most calories is holding {most_calories} calories worth");
