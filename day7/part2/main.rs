@@ -1,5 +1,6 @@
 use std::io;
 use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::collections::HashSet;
 use std::collections::BTreeSet;
 use std::vec::Vec;
@@ -157,22 +158,21 @@ fn main() {
     let total_used_space = state.get_dir_size(&"".to_string());
     let total_free_space = 70000000 - total_used_space;
 
-    for size in directory_sizes {
+    for (size, dir) in directory_sizes {
 	if size > 30000000 - total_free_space {
-	    println!("The size of the smallest deletion candidate is {size}");
+	    println!("Deleting {dir} will save {size}, allowing the system to run");
 	    break;
 	}
     }
 }
 
-fn get_directory_sizes(state: &mut Filesystem) -> Vec<u64> {
-    let mut largest_directories: Vec<u64> = Vec::new();
+fn get_directory_sizes(state: &mut Filesystem) -> BTreeMap<u64, String> {
+    let mut largest_directories: BTreeMap<u64, String> = BTreeMap::new();
     for dir in &state.directory_set.clone() {
 	let dir_size: u64 = state.get_dir_size(&dir);
-	largest_directories.push(dir_size);
+	largest_directories.insert(dir_size, dir.clone());
     }
 
-    largest_directories.sort_unstable();
     return largest_directories;
 }
 
